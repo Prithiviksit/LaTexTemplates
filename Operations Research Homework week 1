@@ -1,0 +1,226 @@
+```latex
+
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{latexsym}
+\usepackage{amsthm}
+\usepackage{amssymb}
+%\usepackage{amsfonts}
+%\usepackage{mathabx}
+\usepackage{textcomp}
+\usepackage{booktabs}
+\usepackage{graphicx}
+
+%formulae number
+\numberwithin{equation}{section}
+%footer and header
+ \usepackage{fancyhdr}
+ \pagestyle{fancy}
+ \cfoot{Reminder: This paper should and most proabaly be printed on both sides.}
+ %content
+ \setcounter{tocdepth}{6}
+
+\title{Operation Research: HW Week 1}
+\author{Yu, Xiaobo\\97141176-6}
+
+\begin{document}
+\maketitle
+%\tableofcontents
+
+\section{P56, 2.2.a No.16}
+The BGC manufactures men's shirts and women's blouses for WDS. WDC will accept all the productions supplied by BGC. The production process including cutting, sewing, and packaging. BGC employs 25 workers in the cutting department , 35 in the sewing department, and 5 in the packaging department. The factory works one 8-hour shifts, 5 days a week. The following table gives the time requirement and profits per unit for the two garments:
+\begin{table}[ht]\caption{Table: Cost and Profit per unit}\label{T1}
+\begin{center}
+	\begin{tabular}{@{}lrrrr@{}}\toprule
+		& \multicolumn{3}{c}{Minutes per unit}\\ \cmidrule{2-4}
+		Garment & Cutting & Sewing & Packaging & unit Profit(\$)\\ \midrule
+		Shirts & 20 & 70 & 12 & 8\\
+		Blouses & 60 & 60 & 4 & 12\\ \bottomrule
+		%
+	\end{tabular}
+\end{center}
+\end{table}
+
+Determine the optimal weekly production schedule for BGC.
+
+\paragraph{Solution}
+
+The first thing we shall begin with is to determine the decision variables:
+
+$x_1$: the number of shirts; and
+
+$x_2$: the number of blouses.\\
+And then we shall derive the objective function:
+\[ \max z=8x_1+12x_2 \]
+And our constrains are as follows:
+\begin{enumerate}
+	\item The time spent on the production of each goods should not exceed the maximum available workforce-time: 
+	\begin{eqnarray}
+		20x_1+60x_2 &\leqslant& 25 \times 8 \times 5 \times 60 \\
+		70x_1+60x_2 &\leqslant& 35 \times 8 \times 5 \times 60 \\
+		12x_1+4x_2 &\leqslant& 5 \times 8 \times 5 \times 60 
+	\end{eqnarray}
+	\item non-negativity
+	\begin{equation}
+		x_1,x_2 \geqslant 0
+	\end{equation}
+\end{enumerate}
+
+\begin{figure}[htbp]\caption{Graphic Solution to the LP problem 1}\label{LP1}
+	\includegraphics[width=8in]{q1}
+\end{figure}
+	
+We can learn from the figure\ref{LP1} that the feasible region is the pentagon surrounded by three constraint lines and the x,y axis and that the objective function achieve its optimum at the point of the intersection of the line $20x_1+60x_2=60000$ and the line $70x_1+60x_2=84000$ \textit{scilicet} the point $(480,840)$. And the $z_{max}=8\times 480+12\times 840=13920$
+
+So the BGC should produce 480 shirts and 840 blouses to make the maximum profit of 13920 dollars.
+
+\section{P82, 2.4.b No. 8}
+Two products are manufactured sequentially on two machines. The time available on each 8 hours per day and may be increased up to 4 hours of overtime, if necessary, at an additional cost of \$ 110 per hour. The following table gives the production rate on the two machines as well as the price per unit of the two products.
+
+\begin{table}[htbp]\caption{Production rate table}\label{T2}
+	\begin{center}
+	\begin{tabular}{@{}lrr@{}}\toprule
+		&\multicolumn{2}{c}{Production Rate(units/hour)} \\ \cmidrule{2-3}
+		&Product 1 & Product 2\\ \midrule
+		Machine 1 & 5 & 5\\
+		Machine 2 & 8 & 4\\ \midrule
+		Price per unit(\$) & 120 & 128 \\ \bottomrule 
+	\end{tabular}
+	\end{center}
+\end{table}
+
+Develop an LP model to determine the optimum production schedule and the recommended use of over time, if any, solve the problem with AMPL, Solver or Tora.
+
+\paragraph{Mathematical Model}
+
+Firstly we determine the decision variables:\\
+\indent $t_{1,1}$: the time spent on product 1 for machine 1; and\\
+\indent $t_{1,2}$: the time spent on product 1 for machine 2; and\\
+\indent $t_{2,1}$: the time spent on product 2 for machine 1; and\\
+\indent $t_{2,2}$: the time spent on product 2 for machine 2. \\
+And then we find the objective function:\\
+\begin{equation}
+	\max z=120\times 5 t_{1,1}+ 128 \times 5 t_{2,1}-c(t_{1,1}+t_{2,1})-c(t_{1,2}+t_{2,2})
+\end{equation}
+where the extra cost function $c(x)$ is defined as
+\begin{equation*}
+	c(x)=\left\{
+	\begin{array}{rcl}
+	110(x-8)&  &12\geqslant x\geqslant 8\\
+	0&  &x<8
+	\end{array}\right.
+\end{equation*}
+
+Finally we need to find out all the constraints:
+\begin{enumerate}
+\item The time spent on the same product should match for two machines\\
+\begin{equation}
+\begin{array}{ll}
+	& 5t_{1,1}  =  8t_{1,2}\\
+	& 5t_{2,1}  =  4t_{2,2}
+\end{array}	
+\end{equation}
+
+\item The hours of overtime is up to four hours which is also implied by the extra cost function\\
+\begin{equation}
+	\begin{array}{ll}
+	t_{1,1}+t_{2,1}\leqslant 12\\
+	t_{1,2}+t_{2,2}\leqslant 12
+	\end{array}
+\end{equation}
+
+\item Non-negativity\\
+\begin{equation}
+	\begin{array}{ll}
+	t_{1,1}+t_{2,1}\geqslant 0\\
+	t_{1,2}+t_{2,2}\geqslant 0
+	\end{array}
+\end{equation}
+\end{enumerate}
+
+\paragraph{Solution}
+I wrote a programme with Python using numerical approach and find the solution to be
+\begin{equation}
+	\left\{
+	\begin{array}{rcl}
+	t_{1,1}&=& 12\\
+	t_{2,1}&=& 0\\
+	t_{1,2}&=& 7.5\\
+	t_{2,2}&=& 0\\
+	z_{max}&=& 6760
+	\end{array}\right.	
+\end{equation}
+
+
+
+\section{P85 2.4.c No.6}
+A large department store operates 7 days a week. The manager estimates that the minimum number of salespersons required to provide prompt service is 12 for Monday 18 for Tuesday, 20 for Wednesday, 28 for Thur. 32 for Friday and 40 for Saturday and Sunday, Each salesperson works for 5 days a week with the two conservative off-days staggered throughout the week. E.g., if 10 salespersons start on Monday, 2 can take their off-days on Tuesday and Wednesday, 5 on Wednesday and Thursday, and 3 on Saturday and Sunday. How many salespersons should be contracted, and how should their off-days be allocated? Use AMPL, SOLVER, and Tora to find the solution. 
+
+\paragraph{Mathematical Model}
+This problem is similar to the bus-scheduling model. We first find the decision variable:\\
+\indent $x_1$: the number of staff who take their days off on Monday and Tuesday;\\ 
+\indent $x_2$: the number of staff who take their days off on Tuesday and Wednesday;\\
+\indent $x_3$: the number of staff who take their days off on Wednesday and Thursday;\\
+\indent $x_4$: the number of staff who take their days off on Thursday and Friday;\\
+\indent $x_5$: the number of staff who take their days off on Friday and Saturday;\\
+\indent $x_6$: the number of staff who take their days off on Saturday and Sunday;\\
+\indent $x_7$: the number of staff who take their days off on Sunday and Monday.\\
+And the objective function is to minimize the total number of employees:
+\begin{equation}
+	\min z=\sum_{i=1}^{7}x_i
+\end{equation}
+
+Constrains:
+\begin{enumerate}
+\item The minimum number of salespersons must be satisfied:\\
+\begin{equation}
+	\left\{
+	\begin{array}{rrrrrrrrrr}
+	\sum_{i=1}^{7}x_i&-x_1&-x_2&&&&&&\geqslant& 12\\
+	\sum_{i=1}^{7}x_i&&-x_2&-x_3&&&&&\geqslant& 18\\
+	\sum_{i=1}^{7}x_i&&&-x_3&-x_4&&&&\geqslant& 20\\
+	\sum_{i=1}^{7}x_i&&&&-x_4&-x_5&&&\geqslant& 28\\
+	\sum_{i=1}^{7}x_i&&&&&-x_5&-x_6&&\geqslant& 32\\
+	\sum_{i=1}^{7}x_i&&&&&&-x_6&-x_7&\geqslant& 40\\
+	\sum_{i=1}^{7}x_i&&&&&&&-x_7&-x_1\geqslant& 40\\
+	\end{array}\right.	
+\end{equation}
+\item Non-negativity:\\
+\begin{equation}
+x_i\geqslant 0,i\in \mathbb{N}\wedge n\leqslant7
+\end{equation}
+\end{enumerate}
+
+Above all the whole formulation would be:
+\begin{equation}
+\min z=\sum_{i=1}^{7}x_i
+\end{equation}
+subject to\\
+\begin{equation}
+\left\{
+\begin{array}{rrrrrrrrrr}
+&&&+x_3&+x_4&+x_5&+x_6&+x_7&\geqslant& 12\\
+& x_1&&&+x_4&+x_5&+x_6&+x_7&\geqslant& 18\\
+& x_1&+x_2&&&+x_5&+x_6&+x_7&\geqslant& 20\\
+& x_1&+x_2&+x_3&&&+x_6&+x_7&\geqslant& 28\\
+& x_1&+x_2&+x_3&+x_4&&&+x_7&\geqslant& 32\\
+& x_1&+x_2&+x_3&+x_4&+x_5&&&\geqslant& 40\\
+&&+x_2&+x_3&+x_4&+x_5&+x_6&&\geqslant& 40
+\end{array}\right.
+\end{equation}
+\[x_i\geqslant 0,i\in \mathbb{N}\wedge n\leqslant7\]
+
+\paragraph{Solution}
+With the help of Excel Solver, we found several sets of schedules that achieve the minimum employment number. For example,
+\begin{equation}
+\begin{array}{rcl}
+\vec{x}&=&[2,8,16,6,8,2,0]\\
+\vec{x}&=&[2,15,9,6,8,2,0]\\
+\vec{x}&=&[2,16,8,14,0,2,0]
+\end{array}
+\end{equation}
+And the minimum number of employees is 42.
+
+\end{document}
+
+```
